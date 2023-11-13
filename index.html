@@ -7,14 +7,17 @@
 </head>
 <body>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <div id="app">{{ text }}</div>
+    <div id="app"> </div>
     <script>
         const vm = Vue.createApp({
             data() {
                 return {
-                    text: "Hello from Vue.js"
+                    attr: "src", // attribute as a variable
+                    img_var: "https://www.webivm.com/wp-content/uploads/Free-Pictures.jpg" // value for the attribute as a variable
                 };
-            }
+            },
+            template: `<img v-bind:src="img_var" v-bind:alt="img_var"/>`, // the value variable used
+            template: `<img v-bind:[attr]="img_var"/>` // the attribute AND the value as variables used
         }).mount("#app");
         console.log(vm);
     </script>
