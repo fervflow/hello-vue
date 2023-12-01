@@ -14,19 +14,11 @@
                 return {
                     doorIsOpen: false,
                     doorStateLabel: "closed. 🚫",
-                    styles: {
-                        backgroundColor: "#eca1a6",
-                    },
                 };
             },
             watch: {
                 doorIsOpen (value) {
                     this.doorStateLabel = value ? "open. ✅" : "closed. 🚫";
-                    if (value) {
-                        this.styles.backgroundColor = "#b5e7a0";
-                    } else {
-                        this.styles.backgroundColor = "#eca1a6";
-                    }
                 }
             },
             computed: {
@@ -35,7 +27,7 @@
                 }
             },
             template: `
-            <div class="container" v-bind:style="styles">
+            <div class="container" v-bind:class="[doorIsOpen ? 'open' : 'closed']">
                 <h2> The door is {{ doorStateLabel }} </h2>
                 <button v-on:click="doorIsOpen = !doorIsOpen"> {{ command }} the door </button>
             </div>
