@@ -12,24 +12,36 @@
         const vm = Vue.createApp({
             data() {
                 return {
-                    doorIsOpen: false,
-                    doorStateLabel: "closed. 🚫",
+                    haveAccess: false,
+                    accessLabel: "don't 🚫",
+                    username: "",
                 };
             },
             watch: {
-                doorIsOpen (value) {
-                    this.doorStateLabel = value ? "open. ✅" : "closed. 🚫";
+                haveAccess (value) {
+                    this.accessLabel = value ? "✅" : "don't 🚫";
+                    if (!value) this.username = "";
                 }
             },
             computed: {
                 command () {
-                    return this.doorIsOpen ? "Close" : "Open";
+                    return this.haveAccess ? "Log out" : "Log in";
                 }
             },
             template: `
-            <div class="container" v-bind:class="[doorIsOpen ? 'open' : 'closed']">
-                <h2> The door is {{ doorStateLabel }} </h2>
-                <button v-on:click="doorIsOpen = !doorIsOpen"> {{ command }} the door </button>
+            <div class="container" v-bind:class="[haveAccess ? 'open' : 'closed']">
+                <h2> You {{ accessLabel }} have access. </h2>
+                <div v-if="haveAccess">
+                    <p>Hey {{ username }}!</p>
+                </div>
+                <div v-else>
+                    <div> Username: </div>
+                    <input type="text" v-model="username" />    
+                </div>
+                <button v-on:click="haveAccess = !haveAccess">
+                    <div v-if="haveAccess"> Log out </div>
+                    <div v-else=> Log in </div>
+                </button>
             </div>
             `
         }).mount("#app");
