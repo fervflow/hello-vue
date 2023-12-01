@@ -12,11 +12,27 @@
         const vm = Vue.createApp({
             data() {
                 return {
-                    text: "Hello from Vue.js"
+                    doorIsOpen: false,
+                    doorStateLabel: "closed. 🚫",
                 };
-            }
+            },
+            watch: {
+                doorIsOpen (value) {
+                    this.doorStateLabel = value ? "open. ✅" : "closed. 🚫";
+                }
+            },
+            computed: {
+                command () {
+                    return this.doorIsOpen ? "Close" : "Open";
+                }
+            },
+            template: `
+                <div> The door is {{ doorStateLabel }} </div>
+                <button v-on:click="doorIsOpen = !doorIsOpen"> {{ command }} the door </button>
+            `
         }).mount("#app");
         console.log(vm);
+
     </script>
 </body>
 </html> 
