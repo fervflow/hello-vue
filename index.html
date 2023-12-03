@@ -9,7 +9,7 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <div id="app">{{ text }}</div>
     <script>
-        const vm = Vue.createApp({
+        const app = Vue.createApp({
             data() {
                 return {
                     haveAccess: false,
@@ -54,16 +54,16 @@
                 }
             },
             methods: {
-                addPost () {
-                    if (this.title.trim() === "" || this.description.trim() === "") {
+                addPost (title, description) {
+                    if (title.trim() === "" || description.trim() === "") {
                         return;
                     }
                     this.posts.push({
                         id: this.nextId,
-                        title: this.title,
-                        description: this.description,
+                        title: title,
+                        description: description,
                     });
-                    this.title = this.description = "";
+                    title = description = "";
                     this.nextId++;
                 },
                 deletePost (id) {
@@ -84,19 +84,18 @@
                 <div v-if="haveAccess">
                     <p>Hey {{ username }}!</p>
                     <div class="list">
-                        <div v-for="item in posts" :key="item.id" class="item">
-                            <div class="title"> {{ item.title }} </div>
-                            <p> {{ item.description }} </p>
-                            <button @click="deletePost(item.id)">Delete</button>
-                        </div>
+                        <item
+                            v-for="item in posts"
+                            :key="item.id"
+                            :post="item"
+                            :delete-post="deletePost"
+                        />
                     </div>
-                    <div class="addPost">
-                        <label> Title: </label>
-                        <input type="text" v-model="title" />
-                        <label> Description: </label>
-                        <input type="text" v-model="description" />
-                        <button @click="addPost"> Add Post </button>
-                    </div>
+                    <add-post
+                        :title="title"
+                        :description="description"
+                        :add-post="addPost"
+                    />
                 </div>
                 <div v-else>
                     <div> Username: </div>
@@ -108,7 +107,39 @@
                 </button>
             </div>
             `
-        }).mount("#app");
+        });
+
+        app.component('item', {
+            props: ['post', 'deletePost'],
+            template: `
+                <div class="item">
+                    <div class="title"> {{ post.title }} </div>
+                    <p> {{ post.description }} </p>
+                    <button @click="deletePost(post.id)">Delete</button>
+                </div>
+            `,
+        });
+
+        app.component('add-post', {
+            props: ['addPost'],
+            data() {
+                return {
+                    title: '',
+                    description: '',
+                }
+            },
+            template: `
+                <div class="addPost">
+                    <label> Title: </label>
+                    <input type="text" v-model="title" />
+                    <label> Description: </label>
+                    <input type="text" v-model="description" />
+                    <button @click="addPost(title, description); title = description = ''"> Add Post </button>
+                </div>
+            `,
+        });
+        
+        const vm = app.mount("#app");
 
     </script>
     <style>
