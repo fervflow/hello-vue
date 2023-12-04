@@ -15,9 +15,18 @@
                     items: ["uno", "dos", "tres"],
                 }
             },
+            methods: {
+                remove(index) {
+                    this.items.splice(index, 1);
+                }
+            },
             template: `
                 <ul>
-                    <v-item v-for="item in items" :text="item"> </v-item>
+                    <v-item
+                        v-for="(item, i) in items"
+                        :text="item"
+                        @remove="remove(i)"
+                    ></v-item>
                 </ul>
             `,
         });
@@ -26,8 +35,13 @@
             props: {
                 text: String,
             },
+            methods: {
+                rm() {
+                    this.$emit("remove");
+                }
+            },
             template: `
-                <li> {{ text }} </li>
+                <li @click="rm"> {{ text }} </li>
                 
             `,
         });
