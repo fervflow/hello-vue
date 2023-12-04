@@ -10,9 +10,28 @@
     <div id="app"></div>
     <script>
         const app = Vue.createApp({
-            template: ``
+            data() {
+                return {
+                    items: ["uno", "dos", "tres"],
+                }
+            },
+            template: `
+                <ul>
+                    <v-item v-for="item in items" :text="item"> </v-item>
+                </ul>
+            `,
         });
         
+        app.component('v-item', {
+            props: {
+                text: String,
+            },
+            template: `
+                <li> {{ text }} </li>
+                
+            `,
+        });
+
         const vm = app.mount("#app");
 
     </script>
