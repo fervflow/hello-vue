@@ -10,9 +10,36 @@
     <div id="app"></div>
     <script>
         const app = Vue.createApp({
-            template: ``
+            data() {
+                return {
+                    text: "Hello Vue.js",
+                }
+            },
+            template: `
+                <div>
+                    <p> {{ text }} </p>
+                    <v-input
+                        v-model:value="text"
+                    ></v-input>
+                </div>
+            `
         });
         
+        app.component('v-input', {
+            props: {
+                value: String,
+            },
+            methods: {
+                onInput(event) {
+                    this.$emit('update:value', event.target.value);
+                }
+            },
+            template: `
+                <input type="text" :value="value" @input="onInput"/>
+            `
+        });
+
+
         const vm = app.mount("#app");
 
     </script>
