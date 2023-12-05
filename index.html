@@ -19,7 +19,7 @@
                 <div>
                     <p> {{ text }} </p>
                     <v-input
-                        v-model:value="text"
+                        v-model="text"
                     ></v-input>
                 </div>
             `
@@ -27,15 +27,12 @@
         
         app.component('v-input', {
             props: {
-                value: String,
+                // modelValue is the default name for a single prop scenario
+                modelValue: String,
             },
-            methods: {
-                onInput(event) {
-                    this.$emit('update:value', event.target.value);
-                }
-            },
+            emits: ['update:modelValue'],
             template: `
-                <input type="text" :value="value" @input="onInput"/>
+                <input type="text" :value="modelValue" @input="$emit('update:modelValue', $event.target.value)"/>
             `
         });
 
