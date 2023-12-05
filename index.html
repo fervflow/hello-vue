@@ -10,9 +10,35 @@
     <div id="app"></div>
     <script>
         const app = Vue.createApp({
-            template: ``
+            data() {
+                return {
+                    text: 'Hola Vue'
+                }
+            },
+            provide() {
+                return {
+                    textProv: this.text,
+                }
+            },
+            template: `
+                <div> {{ text }} </div>
+                <v-hijo> </v-hijo>
+            `
+        });
+
+        app.component('v-hijo', {
+            template: `
+                <v-nieto></v-nieto>
+            `
         });
         
+        app.component('v-nieto', {
+            inject: ['textProv'],
+            template: `
+                <div> {{ textProv }} </div>
+            `
+        });
+
         const vm = app.mount("#app");
 
     </script>
